@@ -71,7 +71,7 @@ const login = async (req, res) => {
     }
     const user = await checkEmail(data.email);
     if (!user) {
-      res.status(400).json({
+      return res.status(400).json({
         field: "email",
         message: "Incorrect or non-existent email address.",
       });
