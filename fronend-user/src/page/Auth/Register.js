@@ -14,13 +14,78 @@ const Register = () => {
     phone: "",
     address: "",
   });
-  const { files, handleFile } = useFile();
+  const { files, handleFile, uploadFiles } = useFile();
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const errSubmit = {};
+  //   let flag = true;
+
+  //   if (values.name === "") {
+  //     errSubmit.name = "Please enter your name";
+  //     flag = false;
+  //   }
+  //   if (values.email === "") {
+  //     errSubmit.email = "Please enter your email";
+  //     flag = false;
+  //   } else if (!validateEmail(values.email)) {
+  //     errSubmit.email = "Invalid email";
+  //     flag = false;
+  //   }
+  //   if (!files || files.length === 0) {
+  //     errSubmit.avatar = "Please upload your avatar";
+  //     flag = false;
+  //   }
+  //   if (values.phone === "") {
+  //     errSubmit.phone = "Please enter your phone";
+  //     flag = false;
+  //   }
+  //   if (values.address === "") {
+  //     errSubmit.address = "Please enter your address";
+  //     flag = false;
+  //   }
+  //   if (values.password === "") {
+  //     errSubmit.password = "Please enter your password";
+  //     flag = false;
+  //   }
+  //   if (values.passCf === "") {
+  //     errSubmit.passCf = "Please enter a valid password";
+  //     flag = false;
+  //   } else if (values.passCf != values.password) {
+  //     errSubmit.passCf = "Incorrect authentication password";
+  //     flag = false;
+  //   }
+
+  //   if (!flag) {
+  //     setErrors(errSubmit);
+  //   } else {
+  //     const imageUrls = uploadFiles();
+  //     const formData = new FormData();
+
+  //     formData.append("user_name", values.name);
+  //     formData.append("email", values.email);
+  //     formData.append("phone", values.phone);
+  //     formData.append("address", values.address);
+  //     formData.append("password", values.password);
+  //     formData.append("avatar", imageUrls);
+
+  //     api
+  //       .post("/register", formData)
+  //       .then((res) => {
+  //         console.log("check data:", res);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errSubmit = {};
     let flag = true;
 
+    // validate (giữ nguyên của bạn)
     if (values.name === "") {
       errSubmit.name = "Please enter your name";
       flag = false;
@@ -59,25 +124,32 @@ const Register = () => {
     if (!flag) {
       setErrors(errSubmit);
     } else {
-      const formData = new FormData();
+      try {
+        // 🔥 1. upload ảnh lên Supabase
+        const imageUrls = await uploadFiles();
 
-      formData.append("user_name", values.name);
-      formData.append("email", values.email);
-      formData.append("phone", values.phone);
-      formData.append("address", values.address);
-      formData.append("password", values.password);
-      formData.append("avatar", files[0]);
+        // 🔥 2. lấy URL avatar
+        const avatarUrl = imageUrls[0];
 
-      api
-        .post("/register", formData)
-        .then((res) => {
-          console.log("check data:", res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        // 🔥 3. gửi data lên backend (KHÔNG dùng FormData nữa)
+        const data = {
+          user_name: values.name,
+          email: values.email,
+          phone: values.phone,
+          address: values.address,
+          password: values.password,
+          avatar: avatarUrl, // chỉ gửi URL
+        };
+
+        const res = await api.post("/register", data);
+
+        console.log("Success:", res);
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
+
   return (
     <div className="register-main">
       <div className="register-box">
