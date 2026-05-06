@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const API_URL = "https://mqlyxvahrgewsosffxft.supabase.co";
+const API_URL = "https://five00miles.onrender.com";
 const API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xbHl4dmFocmdld3Nvc2ZmeGZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNDYyNTcsImV4cCI6MjA5MzYyMjI1N30.liA-ARjBxbRPb-ov2w8hn4eSaOfgtLMxSkrzNuFdxWU"; // lấy trong Supabase Settings → API
 
 const api = axios.create({
-  baseURL: `${API_URL}/rest/v1`,
+  baseURL: `${API_URL}`,
   headers: {
     apikey: API_KEY,
     Authorization: `Bearer ${API_KEY}`,

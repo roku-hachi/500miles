@@ -3,7 +3,11 @@ const cors = require("cors");
 const path = require("path");
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://500miles.vercel.app",
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", require("./routes/authRoutes"));
